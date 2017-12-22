@@ -1,6 +1,12 @@
     .module SELUD
 
+_ID = user_
+
 selectaUD:
+    ld      a,(iy+x_)
+    ld      (iy+_ID),a
+    call    id2x
+    ld      (iy+x_),a
     ld      (iy+y_),0
 
 _initdraw:
@@ -10,19 +16,17 @@ _initdraw:
     ld      (hl),$84
     inc     (iy+y_)
     ld      a,(iy+y_)
-    cp      7
+    cp      9
     jr      nz,_initdraw
 
     ld      (iy+y_),4
-    call    xy2dfile
-    ld      (hl),$85
-    inc     hl
-    ld      (hl),$86
+    jr      _godraw
+
 _loop:
     YIELD
 
     ld      a,(selectedfader)
-    sub     (iy+x_)
+    cp      (iy+_ID)
     jr      nz,_loop
 
     ld      a,(up)
@@ -39,8 +43,8 @@ _loop:
     inc     hl
     ld      (hl),$84
 
+_godraw:
     call    xy2dfile
-
     ld      (iy+aL_),l
     ld      (iy+aH_),h
     ld      (hl),$85
@@ -59,7 +63,7 @@ _goup:
 _godown:
     ld      a,(iy+y_)
     inc     a
-    cp      7
+    cp      9
     ret     z
     ld      (iy+y_),a
     ret

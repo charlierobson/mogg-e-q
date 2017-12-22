@@ -5,6 +5,8 @@ y_ = OUSER+1
 aL_ = OUSER+2
 aH_ = OUSER+3
 
+user_ = OUSER+4
+
 coords:
 _coord_x:   .byte   0
 _coord_y:   .byte   0
