@@ -1,9 +1,11 @@
     .module SELLR
 
 id2x:
+    ld      b,a
     sla     a
     sla     a
     add     a,3
+    add     a,b
     ret
 
 

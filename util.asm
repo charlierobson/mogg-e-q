@@ -7,6 +7,8 @@ aH_ = OUSER+3
 id_ = OUSER+4
 user_ = OUSER+5
 
+.define ADD_HL_A add a,l \ ld l,a \ adc a,h \ sub l \ ld h,a
+
 coords:
 _coord_x:   .byte   0
 _coord_y:   .byte   0
@@ -57,6 +59,8 @@ xy2dfile:
     ld      a,(iy+x_)
     ld      (_coord_x),a
     ld      a,(iy+y_)
+    inc     a
+    inc     a
     ld      (_coord_y),a
 
 coords2dfile:

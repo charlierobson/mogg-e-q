@@ -7,25 +7,26 @@
     .exportmode NO$GMB          ; xxxx:yyyy NAME
     .export
 
+OSTORE = $2400
+
 #include "yield.asm"
 #include "ostore.asm"
+#include "util.asm"
 
-.define ADD_HL_A add a,l \ ld l,a \ adc a,h \ sub l \ ld h,a
+FREELIST = OSTORE + (NSTRUCTS * OSTRUCTSIZE)
 
     .asciimap   'A','Z',{*}-'A'+$26
     .asciimap   '0','9',{*}-'0'+$1c
     .asciimap   ' ',' ',$00
     .asciimap   ':',':',$0e
     .asciimap   '-','-',$16
+    .asciimap   '/','/',$18
     .asciimap   ',',',',$1a
     .asciimap   '.','.',$1b
 
 charset = $2000
 charsetx:
     .incbin "zx81plus.bin"
-
-OSTORE = $2400
-FREELIST = OSTORE + (NSTRUCTS * OSTRUCTSIZE)
 
 inputstates:
     .byte    %10000000,4,%00001000,0        ; up      (Q)
@@ -105,11 +106,16 @@ starthere:
     ld      (de),a
 
     call    printstring
-    .byte   0,12
+    .byte   1,0
+    .asc    "VOLUME      LO  LMID HMID HIGH"
+    .byte   $F0
+
+    call    printstring
+    .byte   0,18
     ;        --------========--------========
-    .asc    "CURSOR KEYS: ALTER SLIDERS"
+    .asc    "   CURSOR KEYS: ALTER SLIDERS"
     .byte   $40
-    .asc    "          0: PLAY NOTE"
+    .asc    "             0: PLAY / STOP"
     .byte   $F0
 
     call    printstring
@@ -121,17 +127,47 @@ starthere:
 
     ; here's the main loop, the root
 
+    ld      (iy+user_),0
+    ld      (iy+user_+1),50
+    ld      a,19+9
+    ld      (_coord_x),a
+    ld      a,19
+    ld      (_coord_y),a
+
+    call    coords2dfile
+    ld      (iy+aL_),l
+    ld      (iy+aH_),h
+
 fnmain:
     call    readinput
     call    waitvsync
     YIELD
 
-    ld      a,(play)
+    dec     (iy+user_+1)        ; timer
+    jr      nz,{+}
+
+    ld      (iy+user_+1),50     ; reset timer,
+    ld      a,(iy+user_)
+    and     a                   ;  test to see if we should play a note
+    call    nz,playmiddlec
+
+    ld      l,(iy+aL_)
+    ld      h,(iy+aH_)
+    ld      a,(hl)
+    xor     $8d
+    and     (iy+user_)
+    ld      (hl),a
+
++:  ld      a,(play)            ; test play toggle
     cp      1
-    call    z,playmiddlec
+    jr      nz,fnmain
 
+    ld      a,(iy+user_)        ; toggle play on/off
+    xor     $ff
+    ld      (iy+user_),a
+
+    ld      (iy+user_+1),1      ; reset timer so we play immediately if enabled
     jr      fnmain
-
 
 
     ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -147,7 +183,6 @@ waitvsync:
     jr      z,{-}
     ret
 
-#include "util.asm"
 #include "input.asm"
 #include "midi.asm"
 #include "selectaUD.asm"
