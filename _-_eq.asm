@@ -120,7 +120,7 @@ starthere:
 
     call    printstring
     .byte   9,23
-    .asc    "MOGG-E-Q V1.00"
+    .asc    "MOGG-E-Q V1.10"
     .byte   $F0
 
 	out     ($fe),a
