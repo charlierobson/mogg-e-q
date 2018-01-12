@@ -1,10 +1,8 @@
     .module SELUD
 
-_ID = user_
-
 selectaUD:
     ld      a,(iy+x_)
-    ld      (iy+_ID),a
+    ld      (iy+id_),a
     call    id2x
     ld      (iy+x_),a
     ld      (iy+y_),0
@@ -19,14 +17,17 @@ _initdraw:
     cp      9
     jr      nz,_initdraw
 
-    ld      (iy+y_),4
+    ld      h,defaultValues/256
+    ld      l,(iy+id_)
+    ld      a,(hl)
+    ld      (iy+y_),a
     jr      _godraw
 
 _loop:
     YIELD
 
     ld      a,(selectedfader)
-    cp      (iy+_ID)
+    cp      (iy+id_)
     jr      nz,_loop
 
     ld      a,(up)
@@ -68,30 +69,6 @@ _godown:
     ld      (iy+y_),a
     jp      setEQ
 
-
-
-setEQ:
-    ld      a,7
-    ld      b,(iy+y_)
-    sub     b
-    sla     a
-    sla     a
-    sla     a
-    sla     a
-    ld      (level),a
-    ld      de,eqMessage
-    ld      l,9
-    jp      spoogemidi
-
-
-eqMessage:
-    .byte   $B0,$62,$07
-    .byte   $B0,$63,$37
-    .byte   $B0,$06
-level:
-    .byte   $40
-
-
-
+    .align  256
 defaultValues:
-    $70, 0, $60,$40,$40,$60
+    .byte   0, $ff, 3, 4, 4, 3

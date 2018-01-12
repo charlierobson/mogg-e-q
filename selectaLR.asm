@@ -1,7 +1,5 @@
     .module SELLR
 
-_SELID = user_
-
 id2x:
     sla     a
     sla     a
@@ -15,7 +13,7 @@ selectedfader:
 
 selectaLR:
     ld      (iy+y_),10
-    ld      (iy+_SELID),1
+    ld      (iy+id_),0
     jr      _draw
 
 _loop:
@@ -28,7 +26,7 @@ _loop:
     call    z,_goright
 
 _draw:
-    ld      a,(iy+_SELID)
+    ld      a,(iy+id_)
     ld      (selectedfader),a
     call    id2x
     ld      (iy+x_),a
@@ -51,16 +49,22 @@ _draw:
 
 
 _goleft:
-    ld      a,(iy+_SELID)
+    ld      a,(iy+id_)
     dec     a
     ret     m
-    ld      (iy+_SELID),a
+    cp      1
+    jr      nz,{+}
+    dec     a
++:  ld      (iy+id_),a
     ret
 
 _goright:
-    ld      a,(iy+_SELID)
+    ld      a,(iy+id_)
     inc     a
-    cp      4
+    cp      6
     ret     z
-    ld      (iy+_SELID),a
+    cp      1
+    jr      nz,{+}
+    inc     a
++:  ld      (iy+id_),a
     ret

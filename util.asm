@@ -4,8 +4,8 @@ x_ = OUSER+0
 y_ = OUSER+1
 aL_ = OUSER+2
 aH_ = OUSER+3
-
-user_ = OUSER+4
+id_ = OUSER+4
+user_ = OUSER+5
 
 coords:
 _coord_x:   .byte   0

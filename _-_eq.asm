@@ -86,17 +86,22 @@ starthere:
 
     ld      bc,selectaUD
     call    objectbeforehead
-    ld      a,1
-    ld      (de),a
-
-    ld      bc,selectaUD
-    call    objectbeforehead
     ld      a,2
     ld      (de),a
 
     ld      bc,selectaUD
     call    objectbeforehead
     ld      a,3
+    ld      (de),a
+
+    ld      bc,selectaUD
+    call    objectbeforehead
+    ld      a,4
+    ld      (de),a
+
+    ld      bc,selectaUD
+    call    objectbeforehead
+    ld      a,5
     ld      (de),a
 
     call    printstring
@@ -109,7 +114,7 @@ starthere:
 
     call    printstring
     .byte   9,23
-    .asc    "MOGG-E-Q V0.00"
+    .asc    "MOGG-E-Q V1.00"
     .byte   $F0
 
 	out     ($fe),a
