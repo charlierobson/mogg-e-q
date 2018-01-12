@@ -54,7 +54,7 @@ _goup:
     dec     a
     ret     m
     ld      (iy+y_),a
-    ret
+    jp      setEQ
 
 _godown:
     ld      a,(iy+y_)
@@ -62,4 +62,32 @@ _godown:
     cp      7
     ret     z
     ld      (iy+y_),a
-    ret
+    jp      setEQ
+
+
+
+setEQ:
+    ld      a,7
+    ld      b,(iy+y_)
+    sub     b
+    sla     a
+    sla     a
+    sla     a
+    sla     a
+    ld      (level),a
+    ld      de,eqMessage
+    ld      l,9
+    jp      spoogemidi
+
+
+eqMessage:
+    .byte   $B0,$62,$07
+    .byte   $B0,$63,$37
+    .byte   $B0,$06
+level:
+    .byte   $40
+
+
+
+defaultValues:
+    $70, 0, $60,$40,$40,$60
