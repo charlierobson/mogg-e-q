@@ -81,22 +81,22 @@ starthere:
 
     ld      bc,selectaUD
     call    objectbeforehead
+    ld      a,0
+    ld      (de),a
+
+    ld      bc,selectaUD
+    call    objectbeforehead
+    ld      a,1
+    ld      (de),a
+
+    ld      bc,selectaUD
+    call    objectbeforehead
+    ld      a,2
+    ld      (de),a
+
+    ld      bc,selectaUD
+    call    objectbeforehead
     ld      a,3
-    ld      (de),a
-
-    ld      bc,selectaUD
-    call    objectbeforehead
-    ld      a,7
-    ld      (de),a
-
-    ld      bc,selectaUD
-    call    objectbeforehead
-    ld      a,11
-    ld      (de),a
-
-    ld      bc,selectaUD
-    call    objectbeforehead
-    ld      a,15
     ld      (de),a
 
     call    printstring

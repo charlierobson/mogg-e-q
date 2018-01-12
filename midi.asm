@@ -32,7 +32,7 @@ _middlec:
     .byte   $90, 60, 127    ; note on channel 0, middle c, on-velocity
     .byte   $80, 60, 0      ; note off channel 0, middle c, off-velocity
 
-
+eqlo
 
 midibuffer:
     .fill   256
